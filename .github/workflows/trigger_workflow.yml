@@ -21,7 +21,7 @@ jobs:
           repo_owner="pryrt" 
           repo_name="receiverWorkflow"  
           event_type="trigger-workflow" 
-          service=${{ github.event.inputs.target_service }}"
+          service="${{ github.event.inputs.target_service }}"
           version="${{ github.event.inputs.target_version }}"
   
           curl -L \
