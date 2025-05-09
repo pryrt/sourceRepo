@@ -2,13 +2,6 @@ name: Trigger Target Workflow
 
 on:
   workflow_dispatch:
-    #inputs:
-    #  target_service:
-    #    description: 'Input a service name (e.g., demo-app)'
-    #    required: true
-    #  target_version:
-    #    description: 'Input a version (e.g., v1.0.0)'
-    #    required: true
 
 jobs:
   trigger:
@@ -31,4 +24,4 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.PAT_TRIGGER_WORKFLOW }}" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             https://api.github.com/repos/$repo_owner/$repo_name/actions/workflows/target_workflow.yml/dispatches \
-            -d "{\"ref\": \"$ref_name\"}"
+            -d "{\"ref\": \"$ref_name\", \"inputs\": {}}"
