@@ -8,24 +8,6 @@ on:
 
 jobs:
   determine-changes:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-         fetch-depth: 0
-      - name: Get changes
-        run: |
-          echo TODO: git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
-          str_var=`git diff --name-only ${{ github.event.before }} ${{ github.event.after }}`
-          echo $str_var
-          IFS=$'\n' read -d "\034" -r -a arr_var <<<"${str_var}\034"
-          for i in "${!arr_var[@]}"; do
-            echo "$i => ${arr_var[$i]}"
-          done
-
-  windows-changes:
     runs-on: windows-latest
 
     steps:
@@ -35,9 +17,13 @@ jobs:
          fetch-depth: 0
       - name: Get changes
         run: |
-          Write-Output "TODO: WINDOWS: git diff --name-only ${{ github.event.before }} ${{ github.event.after }}"
-          $file_array = @( git diff --name-only ${{ github.event.before }} ${{ github.event.after }} )
-          foreach ($file_item in $file_array) {
-            Write-Output "the following is different: $file_item"
+          # Write-Output "TODO: WINDOWS: git diff --name-only ${{ github.event.before }} ${{ github.event.after }}"
+          $watch_files = @("file1.md", "file2.md")
+          $changed_files = @( git diff --name-only ${{ github.event.before }} ${{ github.event.after }} )
+          foreach ($this_file in $changed_files) {
+            Write-Output "the following is different: $this_file"
+            if( $this_file -in $watch_files ) {
+              Write-Output "we care about $this_file"
+            }
           }
           
