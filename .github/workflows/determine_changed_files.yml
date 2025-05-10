@@ -8,7 +8,7 @@ on:
 
 jobs:
   determine-changes:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -17,8 +17,10 @@ jobs:
          fetch-depth: 0
       - name: Get changes
         run: |
-          $file_array = @( git diff --name-only ${{ github.event.before }} ${{ github.event.after }}` )
-          foreach ($file_item in $file_array) {
-            Write-Output "the following is different: $file_item"
-          }
-          
+          echo TODO: git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
+          str_var=`git diff --name-only ${{ github.event.before }} ${{ github.event.after }}`
+          echo $str_var
+          IFS=$'\n' read -d "\034" -r -a arr_var <<<"${str_var}\034"
+          for i in "${!arr_var[@]}"; do
+            echo "$i => ${arr_var[$i]}"
+          done
