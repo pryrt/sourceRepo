@@ -24,3 +24,20 @@ jobs:
           for i in "${!arr_var[@]}"; do
             echo "$i => ${arr_var[$i]}"
           done
+
+  windows-changes:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+         fetch-depth: 0
+      - name: Get changes
+        run: |
+          Write-Output "TODO: WINDOWS: git diff --name-only ${{ github.event.before }} ${{ github.event.after }}"
+          $file_array = @( git diff --name-only ${{ github.event.before }} ${{ github.event.after }} )
+          foreach ($file_item in $file_array) {
+            Write-Output "the following is different: $file_item"
+          }
+          
