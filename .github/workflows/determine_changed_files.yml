@@ -19,7 +19,11 @@ jobs:
         run: |
           # Write-Output "TODO: WINDOWS: git diff --name-only ${{ github.event.before }} ${{ github.event.after }}"
           $watch_files = @("file1.md", "file2.md")
-          $changed_files = @( git diff --name-only ${{ github.event.before }} ${{ github.event.after }} )
+          if("${{ github.event_name }}" -eq "workflow_dispatch") {
+            $changed_files = @( git diff --name-only ${{ github.event.before }} ${{ github.event.after }} )
+          } else {
+            $changed_files = @( git diff --name-only HEAD~1..HEAD )
+          }
           foreach ($this_file in $changed_files) {
             Write-Output "the following is different: $this_file"
             if( $this_file -in $watch_files ) {
