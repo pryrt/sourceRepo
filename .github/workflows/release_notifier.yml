@@ -1,0 +1,47 @@
+name: Plugin Files Release Notifier
+
+on:
+  push:
+    branches: 'main'
+
+  workflow_dispatch:
+
+jobs:
+  release-notifier:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+         fetch-depth: 0
+      - name: Get changes
+        run: |
+          $any_changed = $false
+          $watch_files = @(
+            "scintilla/include/Scintilla.h",
+            "scintilla/include/Sci_Position.h",
+            "PowerEditor/src/MISC/PluginsManager/Notepad_plus_msgs.h",
+            "PowerEditor/src/MISC/PluginsManager/PluginInterface.h",
+            "PowerEditor/src/menuCmdID.h",
+            "PowerEditor/src/WinControls/DockingWnd/Docking.h",
+            "PowerEditor/src/WinControls/DockingWnd/dockingResource.h"
+          )
+          if("${{ github.event_name }}" -eq "workflow_dispatch") {
+            #Write-Output "non-push: use HEAD~1..HEAD, which isn't as specific, but better than nothing"
+            $changed_files = @( git diff --name-only HEAD~1..HEAD )
+          } else {
+            #Write-Output "for-push: use before/after"
+            $changed_files = @( git diff --name-only ${{ github.event.before }} ${{ github.event.after }} )
+          }
+          foreach ($this_file in $changed_files) {
+            #Write-Output "the following is different: $this_file"
+            if( $this_file -in $watch_files ) {
+              Write-Output "+ Saw changes in: $this_file"
+              $any_changed = $true
+            }
+          }
+          if($any_changed) {
+            Write-Output "TODO: There was at least one watched file that was changed, so need to take action..."
+          }
+          
