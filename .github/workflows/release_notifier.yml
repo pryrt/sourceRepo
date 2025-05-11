@@ -45,15 +45,15 @@ jobs:
             Write-Output "TODO: There was at least one watched file that was changed, so need to take action..."
             $map = @(
               @( "${{ secrets.PAT_TRIGGER_WORKFLOW }}", "pryrt/receiverRepo", "target_workflow.yml"),
-              @( "${{ secrets.PAT_NOTIFY_NPPPLUGINS }}", "https://api.github.com/repos/npp-plugins/plugintemplate/actions/workflows/CI_update_remote.yml/dispatches" ),
-              @( "${{ secrets.PAT_NOTIFY_NPPPLUGINS }}", "https://api.github.com/repos/npp-plugins/plugindemo/actions/workflows/CI_update_remote.yml/dispatches" )
+              @( "${{ secrets.PAT_NOTIFY_NPPPLUGINS }}", "npp-plugins/plugintemplate", "CI_update_remote.yml" ),
+              @( "${{ secrets.PAT_NOTIFY_NPPPLUGINS }}", "npp-plugins/plugindemo", "CI_update_remote.yml" )
             )
 
             foreach ($target in $map) {
               $pat = $target[0]
               $ref = $target[1]
               $yml = $target[2]
-              Write-Output "DEBUG: len(pat)='$($pat.Length)' ref='$ref' len(ref)=$($ref.Length) yml='$yml' len(ref)=$($yml.Length): 'https://api.github.com/repos/$ref/actions/workflows/$yml/dispatches'"
+              Write-Output "DEBUG: len(pat)='$($pat.Length)' ref='$ref' len(ref)=$($ref.Length) yml='$yml' len(yml)=$($yml.Length): 'https://api.github.com/repos/$ref/actions/workflows/$yml/dispatches'"
               #curl -L \
               #  -X POST \
               #  -H "Accept: application/vnd.github+json" \
