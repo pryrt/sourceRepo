@@ -2,7 +2,7 @@ name: Determine Changed Files
 
 on:
   push:
-    branches: 'main'
+    branches: 'xmain'
 
   workflow_dispatch:
 
