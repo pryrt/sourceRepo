@@ -45,12 +45,14 @@ jobs:
             Write-Output "TODO: There was at least one watched file that was changed, so need to take action..."
             $map = @(
               @( "${{ secrets.PAT_TRIGGER_WORKFLOW }}", "https://api.github.com/repos/pryrt/receiverRepo/actions/workflows/target_workflow.yml/dispatches"),
-              @( "${{ secrets.PAT_NOTIFY_NPPPLUGINS  }}", "https://api.github.com/repos/npp-plugins/plugintemplate/actions/workflows/CI_update_remote.yml/dispatches" ),
-              @( "${{ secrets.PAT_NOTIFY_NPPPLUGINS  }}", "https://api.github.com/repos/npp-plugins/plugindemo/actions/workflows/CI_update_remote.yml/dispatches" )
+              @( "${{ secrets.PAT_NOTIFY_NPPPLUGINS }}", "https://api.github.com/repos/npp-plugins/plugintemplate/actions/workflows/CI_update_remote.yml/dispatches" ),
+              @( "${{ secrets.PAT_NOTIFY_NPPPLUGINS }}", "https://api.github.com/repos/npp-plugins/plugindemo/actions/workflows/CI_update_remote.yml/dispatches" )
             )
 
             foreach ($target in $map) {
-              $pat, $url = $target
+              $pat = $target[0]
+              $url = $target[1]
+              Write-Output "DEBUG: pat='$pat' url='$url'"
               curl -L \
                 -X POST \
                 -H "Accept: application/vnd.github+json" \
