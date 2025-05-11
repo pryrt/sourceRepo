@@ -44,21 +44,22 @@ jobs:
           if($any_changed) {
             Write-Output "TODO: There was at least one watched file that was changed, so need to take action..."
             $map = @(
-              @( "${{ secrets.PAT_TRIGGER_WORKFLOW }}", "https://api.github.com/repos/pryrt/receiverRepo/actions/workflows/target_workflow.yml/dispatches"),
+              @( "${{ secrets.PAT_TRIGGER_WORKFLOW }}", "pryrt/receiverRepo", "target_workflow.yml"),
               @( "${{ secrets.PAT_NOTIFY_NPPPLUGINS }}", "https://api.github.com/repos/npp-plugins/plugintemplate/actions/workflows/CI_update_remote.yml/dispatches" ),
               @( "${{ secrets.PAT_NOTIFY_NPPPLUGINS }}", "https://api.github.com/repos/npp-plugins/plugindemo/actions/workflows/CI_update_remote.yml/dispatches" )
             )
 
             foreach ($target in $map) {
               $pat = $target[0]
-              $url = $target[1]
-              Write-Output "DEBUG: len(pat)='$pat.Length' url='$url' len(url)=$url.Length"
+              $ref = $target[1]
+              $yml = $target[2]
+              Write-Output "DEBUG: len(pat)='$($pat.Length)' ref='$ref' len(ref)=$($ref.Length) yml='$yml' len(ref)=$($yml.Length): 'https://api.github.com/repos/$ref/actions/workflows/$yml/dispatches'"
               #curl -L \
               #  -X POST \
               #  -H "Accept: application/vnd.github+json" \
               #  -H "Authorization: Bearer $pat" \
               #  -H "X-GitHub-Api-Version: 2022-11-28" \
-              #  "$url" \
+              #  https://api.github.com/repos/$ref/actions/workflows/$yml/dispatches \
               #  -d "{\"ref\": \"${{ github.ref_name }}\", \"inputs\": {}}"              
             }
           }
