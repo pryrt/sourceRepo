@@ -52,7 +52,7 @@ jobs:
             foreach ($target in $map) {
               $pat = $target[0]
               $url = $target[1]
-              Write-Output "DEBUG: pat='$pat' url='$url'"
+              Write-Output "DEBUG: len(pat)='$pat.Length' url='$url' len(url)=$url.Length"
               curl -L \
                 -X POST \
                 -H "Accept: application/vnd.github+json" \
