@@ -53,7 +53,7 @@ jobs:
               $ref = $target[1]
               $yml = $target[2]
               # Write-Output "DEBUG: len(pat)='$($pat.Length)' ref='$ref' len(ref)=$($ref.Length) yml='$yml' len(yml)=$($yml.Length): 'https://api.github.com/repos/$ref/actions/workflows/$yml/dispatches'"
-              Write-Output "Notifying '$ref' workflow '$yml' using curl 'https://api.github.com/repos/$ref/actions/workflows/$yml/dispatches'"
+              Write-Output "Notifying '$ref' workflow '$yml' using curl 'https://api.github.com/repos/$ref/actions/workflows/$yml/dispatches'."
               curl -s -L `
                 -X POST `
                 -H "Accept: application/vnd.github+json" `
@@ -62,4 +62,6 @@ jobs:
                 https://api.github.com/repos/$ref/actions/workflows/$yml/dispatches `
                 -d "{`"ref`": `"${{ github.ref_name }}`", `"inputs`": {}}"              
             }
+          } else {
+            Write-Output "No watched-files changed, so not sending notification to plugin templates this time."
           }
